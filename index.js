@@ -31,18 +31,6 @@ app.use('/api/user', UserRoutes);
 app.use('/api/publication', PublicationRoutes);
 app.use('/api/follow', FollowRoutes);
 
-//Ruta de prueba
-app.get('/ruta-prueba', (req, res) => {
-   return res.status(200).json(
-      {
-         'id': 1,
-         'name': 'Monica Vega',
-         'username': 'monicapvega'
-      }
-   );
-});
-
-
 // Configurar el Servidor para escuchar las peticiones HTTP
 app.listen(puerto, () => {
    console.log("Servidor de Node ejecutandose en el puerto", puerto);
