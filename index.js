@@ -3,6 +3,8 @@ import connection from "./database/connection.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import UserRoutes from "./routes/user.js"
+import PublicationRoutes from "./routes/publication.js";
+import FollowRoutes from "./routes/follow.js";
 
 // Mensaje de bienvenida para verificar que ejecute bien la API de Node
 console.log("API Node en ejecucion");
@@ -26,7 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configurar rutas del aplicativo
 app.use('/api/user', UserRoutes);
-
+app.use('/api/publication', PublicationRoutes);
+app.use('/api/follow', FollowRoutes);
 
 //Ruta de prueba
 app.get('/ruta-prueba', (req, res) => {
