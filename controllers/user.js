@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { createToken } from "../services/jwt.js";
 
 
+
 // Método de prueba de usuario
 export const testUser = (req, res) => {
   return res.status(200).send({
@@ -147,7 +148,7 @@ export const profile = async (req, res) => {
     const user = await User.findById(userId).select('-password -role -email -__v');
 
     // Verficiar si el usuario no existe
-    if(!user){
+    if (!user) {
       return res.status(404).send({
         status: "success",
         message: "Usuario no encontrado"
@@ -165,6 +166,49 @@ export const profile = async (req, res) => {
     return res.status(500).send({
       status: "error",
       message: "Error al obtener el perfil del usuario"
+    });
+  }
+}
+
+//Metodo para listar usuarios con la paginacion de MONGO DB
+export const listUsers = async (req, res) => {
+  try {
+    //Gestionar paginas
+    //Controlar la pagina actual
+    let page = req.params.page ? parseInt(req.params.page, 10) : 1;
+    // Configurar los items por pagina
+    let itemsPerPage = req.query.limit ? parseInt(req.query.limit, 10) : 3;
+
+    // Realizar consulta paginada 
+    const options = {
+      page: page,
+      limit: itemsPerPage,
+      select: '-password -email -role -__v'
+    };
+    const users = await User.paginate({}, options);
+    //  Si no hay usuarios disponibles
+    if (!users || users.docs.length === 0) {
+      return res.status(404).send({
+        status: "error",
+        message: "No existen usuarios disponibles",
+      });
+    }
+
+    // Devolver los usuarios paginados
+    return res.status(200).json({
+      status: "sucess",
+      users: users.docs,
+      totalDocs: users.totalDocs,
+      totalPage: users.totalPages,
+      Currentpage: users.page,
+      pagingCounter: users.pagingCounter
+    });
+
+  } catch (error) {
+    console.log("Error al listar los usuarios: ", error)
+    return res.status(500).send({
+      status: "error",
+      message: "Error al listar los usuarios",
     });
   }
 }

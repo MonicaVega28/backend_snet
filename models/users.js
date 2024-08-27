@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const UserSchema = Schema({
     name: {
@@ -38,7 +39,10 @@ const UserSchema = Schema({
     }
 });
 
+// Añadir el plugin de paginación de Mongo
+UserSchema.plugin(mongoosePaginate);
+
 export default model("User", UserSchema, "users");
 //"User" nombre del modelo
-//UserSchema nombre del esquema
-//"users" nombre de la coleccion en MongoDB
+// UserSchema nombre del esquema
+// "users" nombre de la coleccion en MongoDB
